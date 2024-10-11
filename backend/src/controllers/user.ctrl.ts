@@ -3,8 +3,18 @@ import { CRequestBody } from "../interfaces/express.interface";
 import { User } from "../models/user.models";
 import { serializedData } from "../helpers/serializedUserData";
 import bcryptjs from "bcryptjs";
+import { generateToken } from "../middlewares/jwt.mid";
 
 export function getUser(req: Request, res: Response) {
+  const { isLogin } = req.session;
+
+  if (!isLogin) {
+    res.status(400).json({
+      message: "log in first.",
+    });
+    return;
+  }
+
   res.status(200).json({
     message: "OK",
   });
@@ -55,7 +65,10 @@ export async function createUser(
  *  path: users/login
  *  method: POST
  */
-export async function loginUser(req: Request, res: Response): Promise<void> {
+export async function loginUser(
+  req: Request<{}, {}, CRequestBody>,
+  res: Response
+): Promise<void> {
   const { username, password } = req.body || {};
 
   if (!username || !password) {
@@ -85,11 +98,22 @@ export async function loginUser(req: Request, res: Response): Promise<void> {
 
   //successfully logged.
 
+  req.session.isLogin = true;
+  req.session.data = {
+    userId: foundUser._id,
+  };
+
+  const token = generateToken(
+    { datas: foundUser },
+    <string>process.env.JWT_SECRET
+  );
+
   res.status(201).json({
     message: "Logged in",
     user: {
       username: foundUser.username,
       id: foundUser._id,
+      token,
     },
   });
 

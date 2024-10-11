@@ -42,14 +42,16 @@ app.use(
 app.use(connectDatabase);
 
 app.get("/", (req: Request, res: Response) => {
-  req.session.user = {
-    username: "Heia",
-  };
+  // req.session.user = {
+  //   username: "Heia",
+  // };
 
   res.status(200).json({
     message: "UP",
   });
 });
+
+
 
 //routes
 app.use("/users", userRoutes);

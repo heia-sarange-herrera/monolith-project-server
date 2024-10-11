@@ -40,9 +40,9 @@ app.use((0, express_session_1.default)({
 //database connection
 app.use(database_config_1.connectDatabase);
 app.get("/", (req, res) => {
-    req.session.user = {
-        username: "Heia",
-    };
+    // req.session.user = {
+    //   username: "Heia",
+    // };
     res.status(200).json({
         message: "UP",
     });

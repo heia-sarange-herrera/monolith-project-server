@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { verifyJWToken } from '../middlewares/jwt.mid';
 import {
   createUser,
   getUser,
@@ -12,7 +13,6 @@ router.post("/reg", createUser);
 router.post("/login", loginUser);
 
 router.get("/try", getUser);
-
 router.get("/:id", getUserById);
 
 export default router;

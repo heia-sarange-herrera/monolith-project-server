@@ -19,7 +19,15 @@ exports.getUserById = getUserById;
 const user_models_1 = require("../models/user.models");
 const serializedUserData_1 = require("../helpers/serializedUserData");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jwt_mid_1 = require("../middlewares/jwt.mid");
 function getUser(req, res) {
+    const { isLogin } = req.session;
+    if (!isLogin) {
+        res.status(400).json({
+            message: "log in first.",
+        });
+        return;
+    }
     res.status(200).json({
         message: "OK",
     });
@@ -87,11 +95,17 @@ function loginUser(req, res) {
             return;
         }
         //successfully logged.
+        req.session.isLogin = true;
+        req.session.data = {
+            userId: foundUser._id,
+        };
+        const token = (0, jwt_mid_1.generateToken)({ datas: foundUser }, process.env.JWT_SECRET);
         res.status(201).json({
             message: "Logged in",
             user: {
                 username: foundUser.username,
                 id: foundUser._id,
+                token,
             },
         });
         return;
