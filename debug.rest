@@ -1,0 +1,27 @@
+GET http://localhost:5000/users/try HTTP/1.1
+
+###
+
+POST http://localhost:5000/users/reg HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "SABBAH",
+    "password": "1234567"
+}
+
+###
+###
+
+POST http://localhost:5000/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "sabbah",
+    "password": "1234567"
+}
+
+###
+GET http://localhost:5000 HTTP/1.1
+###
+GET http://localhost:5000/users/670860d186ebc28a86e836a4 HTTP/1.1
